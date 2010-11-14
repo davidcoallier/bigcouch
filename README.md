@@ -57,6 +57,28 @@ To install Spidermonkey 1.9.2 from PPA:
 
 `sudo` is only necessary when installing to a prefix which is not user-writeable.  In any case, the installer tries to chown the database directory and logfile to the user who configured BigCouchbigcouch.
 
+#### Ubuntu 10.04 LTS Potential Issues ####
+
+The Erlang package on Ubuntu 10.04 LTS is somewhat broken for 2 of the files required in the `make install` phase. You may encounter the following errors:
+
+    ERROR: Unable to generate spec: read file info /usr/lib/erlang/man/man5/modprobe.d.5 failed
+or
+    ERROR: Untable to generate spec: read file info /usr/lib/erlang/man/man1/gst-xmlinspect-0.10.1 failed
+
+If this happens, panic not, simply replace the two files with their gzip'ed counterparts already on the system like such:
+
+    cd /usr/lib/erlang/man/man5
+    rm modprobe.d.5
+    ln -s modprobe.conf.5.gz modprobe.d.5
+
+Once you've replaced the modprobe.d.5 file, you can now replace the gst-xmlinspect-0.10.1 file following the same procedure:
+    
+    cd /usr/lib/erlang/man/man1
+    rm gst-xmlinspect-0.10.1
+    ln -s gst-xmlinspect-0.10.1.gz gst-xmlinspect-0.10.1
+
+You should now be able to execute `make install` correctly.
+
 #### Starting BigCouch
 
     $PREFIX/bin/bigcouch
